@@ -18,3 +18,17 @@ conslyric = "conslyric:main"
 [build-system]
 requires = ["uv_build>=0.9.8,<0.10.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "libretto>=0.2.0",
+]
+
+[tool.libretto]
+venv = ".venv"
+
+[tool.libretto.tasks]
+publish = [
+    "uv build",
+    "uv publish"
+]

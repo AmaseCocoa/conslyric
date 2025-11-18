@@ -32,10 +32,27 @@ dependencies = [
     { name = "typer" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "libretto" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "typer", specifier = ">=0.20.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "libretto", specifier = ">=0.2.0" }]
+
+[[package]]
+name = "libretto"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/17/a8/c370bf3a1900b1b1fcd03dcbe613cee7298c9a81ec33644b516a5c51583b/libretto-0.2.0.tar.gz", hash = "sha256:ec0489aa74e6c56fac05882a6338b6852a715db5f92e80e077bfc141b9ff8da0", size = 10435, upload-time = "2025-10-29T09:56:36.454Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/4a/9bea77ae174c1a47a9b9875b2ea0934d375e40f3340e9a3195469e7f23e8/libretto-0.2.0-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:c9f74ac4a231900bf21337abc949f9b3ab2d3953895af9a8d7e0513c1cba4b14", size = 1421957, upload-time = "2025-10-29T09:56:34.355Z" },
 ]
 
 [[package]]
