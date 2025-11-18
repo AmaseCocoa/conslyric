@@ -12,6 +12,10 @@ dependencies = [
     "typer>=0.20.0",
 ]
 
+[project.urls]
+Repository = "https://github.com/AmaseCocoa/conslyric"
+Issues = "https://github.com/AmaseCocoa/conslyric/issues"
+
 [project.scripts]
 conslyric = "conslyric:main"
 
