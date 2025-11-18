@@ -1,0 +1,4 @@
+# examples
+```
+$ conslyric ./demo.cly
+```

@@ -1,0 +1,41 @@
+consLyric: "1"
+
+metadata:
+  time: "14.60s"
+  showDefault: "1s"
+  sleepDefault: "0.5s"
+
+define:
+  fastLyric:
+    type: func
+    args:
+      - showTime:num
+    run:
+      - ::setShowRule: {duration: "${showTime}s"}
+      - ::setSleepRule: {duration: "0.1s"}
+
+run:
+  - ::cons:clear: null
+  - ::cons:setcolor: {color: "cyan"}
+  - "Hello, Conslyric!"
+  - ::cons:color:reset: null
+  - ::cons:seteffect:typewriter: {speed: "0.1s"}
+  - "This is a typewriter effect."
+  - ::cons:effect:reset: null
+  - ::cons:setcolor: {color: "magenta"}
+  - "Now with a glitch effect!"
+  - ::cons:seteffect:glitch: {intensity: 5}
+  - "Glitchy text here."
+  - ::cons:effect:reset: null
+  - ::cons:color:reset: null
+  - ::cons:inplace: null
+  - "In-place text 1"
+  - "In-place text 2"
+  - ::cons:noinplace: null
+  - ::fastLyric: {showTime: 0.2}
+  - "Fast lyric 1"
+  - "Fast lyric 2"
+  - ::endSection: null
+  - "Back to default."
+  - ::cons:flash: {color: "white", duration: "0.2s"}
+  - "End of demo."
