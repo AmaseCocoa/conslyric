@@ -33,6 +33,8 @@ venv = ".venv"
 
 [tool.libretto.tasks]
 publish = [
+    { cmd = "rm -rf dist", platforms = ["linux", "macos"] },
+    { cmd = "rmdir /s /q dist", platforms = ["windows"] },
     "uv build",
     "uv publish"
 ]
