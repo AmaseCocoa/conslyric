@@ -1,7 +1,7 @@
 consLyric: "1"
 
 metadata:
-  time: "14.60s"
+  time: "17.85s"
   showDefault: "1s"
   sleepDefault: "0.5s"
 
@@ -21,6 +21,8 @@ run:
   - ::cons:color:reset: null
   - ::cons:seteffect:typewriter: {speed: "0.1s"}
   - "This is a typewriter effect."
+  - ::cons:seteffect:typewriter: {speed: "0.01s"}
+  - "You can make faster that."
   - ::cons:effect:reset: null
   - ::cons:setcolor: {color: "magenta"}
   - "Now with a glitch effect!"
@@ -38,4 +40,7 @@ run:
   - ::endSection: null
   - "Back to default."
   - ::cons:flash: {color: "white", duration: "0.2s"}
+  - ::cons:iter: {count: 8, sleep: "0.1s"}
+  - Happy today :D
+  - ::cons:enditer: null
   - "End of demo."

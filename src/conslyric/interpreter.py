@@ -12,8 +12,10 @@ from .std import (
     clear,
     color_reset,
     effect_reset,
+    enditer,
     flash,
     inplace,
+    iter,
     noinplace,
     setcolor,
     seteffect_glitch,
@@ -39,6 +41,10 @@ class ConslyricInterpreter:
         self.total_elapsed_time = 0.0
         self.time_limit = self._parse_time_string(self.data["metadata"]["time"])
         self.inplace_mode = False
+        self.iter = False
+        self.iter_count: Optional[int] = None
+        self.iter_sleep: Optional[float] = None
+        
         self.current_text_color: Optional[str] = (
             None  # rich color string or None
         )
@@ -60,6 +66,8 @@ class ConslyricInterpreter:
             "cons:effect:reset": effect_reset,
             "cons:inplace": inplace,
             "cons:noinplace": noinplace,
+            "cons:iter": iter,
+            "cons:enditer": enditer,
         }
 
     def _parse_time_string(self, time_str: str) -> float:
@@ -95,6 +103,10 @@ class ConslyricInterpreter:
                 duration_str = args.get("duration")
                 if duration_str:
                     time_consumed = self._parse_time_string(duration_str)
+            elif cmd_without_prefix == "cons:iter":
+                sleep_str = args.get("sleep")
+                if sleep_str:
+                    time_consumed = self._parse_time_string(sleep_str)
             elif cmd_without_prefix == "cons:seteffect:typewriter":
                 speed = args.get("speed")
                 if speed is None:
@@ -435,6 +447,19 @@ class ConslyricInterpreter:
             self.data["metadata"]["sleepDefault"]
         )
         self.console.print("[dim]Rules reset to default.[/dim]")
+        
+    def _apply_iter_if_enabled(self, *objects, **kwargs):
+        if self.iter and self.iter_count:
+            for _ in range(self.iter_count):
+                self.console.print(
+                    *objects, **kwargs
+                )
+                if self.iter_sleep:
+                    time.sleep(self.iter_sleep)
+        else:
+            self.console.print(
+                *objects, **kwargs
+            )
 
     def _apply_effects_and_print(self, text_content: str, duration: float):
         """Applies current effects and prints the text."""
@@ -454,16 +479,16 @@ class ConslyricInterpreter:
 
             for i in range(len(text_content) + 1):
                 if self.inplace_mode:
-                    self.console.print(
+                    self._apply_iter_if_enabled(
                         display_text[:i], end="\r", overflow="crop"
                     )
                 else:
-                    self.console.print(
+                    self._apply_iter_if_enabled(
                         display_text[:i], end="\r", overflow="crop"
                     )  # Still use \r for typewriter effect
                 time.sleep(speed)
             if not self.inplace_mode:
-                self.console.print()  # Newline after typewriter if not in-place
+                self._apply_iter_if_enabled()  # Newline after typewriter if not in-place
         elif self.current_effect and self.current_effect["type"] == "glitch":
             intensity = self.current_effect["intensity"]
             # Simple glitch simulation: print text multiple times with random chars/colors
@@ -479,26 +504,26 @@ class ConslyricInterpreter:
                 glitch_color = random.choice(
                     ["red", "green", "blue", "magenta", "cyan", "yellow"]
                 )
-                self.console.print(
+                self._apply_iter_if_enabled(
                     Text(glitched_text, style=glitch_color),
                     end="\r",
                     overflow="crop",
                 )
                 time.sleep(0.05)  # Small delay for glitch effect
             if self.inplace_mode:
-                self.console.print(
+                self._apply_iter_if_enabled(
                     display_text, end="\r", overflow="crop"
                 )  # Final correct text
             else:
-                self.console.print(display_text)
+                self._apply_iter_if_enabled(display_text)
             self.total_elapsed_time += duration
             time.sleep(duration)  # Wait for the actual duration after glitch
         else:
             # No special effect
             if self.inplace_mode:
-                self.console.print(display_text, end="\r", overflow="crop")
+                self._apply_iter_if_enabled(display_text, end="\r", overflow="crop")
             else:
-                self.console.print(display_text)
+                self._apply_iter_if_enabled(display_text)
             self.total_elapsed_time += duration
             time.sleep(duration)
 
